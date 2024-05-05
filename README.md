@@ -11,3 +11,42 @@ readme server
 
 **Important:**
 The credentials for the Mongo Atlas DB in `dev.js` are read only. If you attempt to log in without first adding your own connection string (covered later in the course) you will see an error: `[0] MongoError: user is not allowed to do action [insert] on [advnode.users]`
+
+## redis
+
+### Installation 
+
+- first install brew package manager if not installed
+```
+
+```
+
+- To install redis in our local machine,
+
+```
+brew install redis
+```
+
+- To start redis using brew,
+
+```
+brew services start redis
+```
+
+- To Check redis server is running,
+
+```
+redis-cli ping
+```
+
+- To stop redis server
+
+```
+brew services stop redis
+```
+
+- To restart redis
+
+```
+brew services restart redis
+```
