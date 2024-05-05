@@ -3,6 +3,7 @@
 
 # dependencies
 node_modules
+condig/dev.js
 
 # testing
 coverage
