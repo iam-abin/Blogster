@@ -17,9 +17,7 @@ The credentials for the Mongo Atlas DB in `dev.js` are read only. If you attempt
 ### Installation 
 
 - first install brew package manager if not installed
-```
-
-```
+(visit the official site of brew to install based on the os)
 
 - To install redis in our local machine,
 

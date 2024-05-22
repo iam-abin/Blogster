@@ -8,6 +8,7 @@ import * as actions from '../../actions';
 
 class BlogFormReview extends Component {
   state = {file: null}
+  
   renderFields() {
     const { formValues } = this.props;
 
@@ -49,6 +50,7 @@ class BlogFormReview extends Component {
   }
 
   onFileChange(event){
+    console.log(event.target.files[0]);
     this.setState({file: event.target.files[0] });
   }
 

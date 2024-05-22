@@ -1,9 +1,13 @@
+require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
+const cors = require('cors')
+
 const keys = require('./config/keys');
+
 
 // To available content of these file globally
 require('./models/User');
@@ -11,15 +15,16 @@ require('./models/Blog');
 require('./services/passport');
 require('./services/cache');
 
+
 mongoose.Promise = global.Promise;
-mongoose.connect(keys.mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(keys.mongoURI);
+
 
 const app = express();
+app.use(cors())
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({extended: true}));
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -29,8 +34,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 require('./routes/authRoutes')(app);
 require('./routes/blogRoutes')(app);
+require('./routes/uploadRoutes')(app);
 
 if (['production'].includes(process.env.NODE_ENV)) {
   app.use(express.static('client/build'));
