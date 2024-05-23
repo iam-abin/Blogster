@@ -12,6 +12,7 @@ const s3 = new AWS.S3({
 });
 
 module.exports = (app) => {
+	// Request to get the presigned url from aws s3
     app.get("/api/upload", requireLogin, async (req, res) => {
         const key = `${req.user.id}/${uuid()}.jpeg`;
         console.log(key);
@@ -23,6 +24,7 @@ module.exports = (app) => {
             Expires: 60
         };
 
+		// In aws s3 files are refered to as objects
         s3.getSignedUrl("putObject", params, (err, url) => {
             if (err) {
                 console.error("Error generating signed URL", err);

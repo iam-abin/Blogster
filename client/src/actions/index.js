@@ -14,7 +14,7 @@ export const handleToken = token => async dispatch => {
 };
 
 export const submitBlog = (values, file, history) => async dispatch => {
-  //  uploadConfig contains 'key' which is the folder and file name and
+  //  Request to get presigned url.uploadConfig contains 'key' which is the folder and file name and
   // 'url' is the s3 presignedUrl to which we upload image file
   const uploadConfig = await axios.get('/api/upload');
 
@@ -24,7 +24,8 @@ export const submitBlog = (values, file, history) => async dispatch => {
     }
   })
 
-  const res = await axios.post('/api/blogs', values);
+  // Request to upload blog details
+  const res = await axios.post('/api/blogs', {...values, imageUrl: uploadConfig.data.key});
 
   history.push('/blogs');
   dispatch({ type: FETCH_BLOG, payload: res.data });
