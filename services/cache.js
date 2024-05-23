@@ -49,6 +49,7 @@ mongoose.Query.prototype.exec = async function () {
 	const result = await exec.apply(this, arguments);
 	// hset eg_- {user1: {name: "abin", age: 10}} // its like a nested object
 	client.hset(this.hashKey, key, JSON.stringify(result), "EX", 10); // expires after 10 seconds
+	console.log("SERVING FROM MONGO");
 	return result;
 };
 

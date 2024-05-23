@@ -6,7 +6,6 @@ module.exports = {
   mongoURI: process.env.MONGO_URI,
 
   cookieKey: "12312bac3123",
-  type: "this is ci file",
   accessKeyIdS3: process.env.AWS_S3_ACCESS_KEY_ID,
   secretAccessKeyS3: process.env.AWS_S3_SECRET_ACCESS_KEY,
   awsS3BucketName: process.env.AWS_S3_BUCKET_NAME,

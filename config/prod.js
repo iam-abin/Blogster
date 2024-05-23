@@ -5,7 +5,6 @@ module.exports = {
   mongoURI: process.env.MONGO_URI,
 
   cookieKey: process.env.COOKIE_KEY,
-  type: "this is prod file",
   accessKeyIdS3: process.env.AWS_S3_ACCESS_KEY_ID,
   secretAccessKeyS3: process.env.AWS_S3_SECRET_ACCESS_KEY,
   awsRegion: process.env.AWS_REGION,
