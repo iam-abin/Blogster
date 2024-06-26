@@ -19,12 +19,12 @@ module.exports = (app) => {
 
         const params = {
             Bucket: keys.awsS3BucketName,
-            Key: key, // Corrected to use capital "K"
+            Key: key,
             ContentType: "image/jpeg", // Ensure ContentType is specified
             Expires: 60
         };
 
-		// In aws s3 files are refered to as objects
+		// In aws s3 files are refered to as objects // requesting for presigned url
         s3.getSignedUrl("putObject", params, (err, url) => {
             if (err) {
                 console.error("Error generating signed URL", err);

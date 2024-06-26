@@ -8,9 +8,9 @@ client.hget = util.promisify(client.hget); //  promisify() converts callback-bas
 const exec = mongoose.Query.prototype.exec; // it stores reference to the original mongoose 'exec' function
 
 // Creating a function for caching. Caching will perform only if 'useCache' variable is true
-mongoose.Query.prototype.cache = function (options = {}) {
+mongoose.Query.prototype.cache = function (options = {}) { // example req.user.id is key in find().cache({key: req.user.id}); 
 	this.useCache = true; // 'useCache' is a variable that we are creating now, its not built-in
-	this.hashKey = JSON.stringify(options.key || ""); // key passing in options is the top-level key, ie, hashkey
+	this.hashKey = JSON.stringify(options.key || ""); // key passing in options is the top-level key, ie, hashkey ie, userId
 
 	return this; // It will help for chaining in the query, eg:- .limit(10).cache().skip(2).sort()
 };
@@ -26,6 +26,7 @@ mongoose.Query.prototype.exec = async function () {
 	const key = JSON.stringify(
 		// 'this' represents 'mongoose.Query'
 		// this.getQuery() used to return all the current query filter as a single js object
+		// ie, things passing inside find() are using ase key with collectin name
 		// this.mongooseCollection.name
 		Object.assign({}, this.getQuery(), {
 			collection: this.mongooseCollection.name,
