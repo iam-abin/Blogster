@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
+import { AXIOS } from "../../utils/axiosApi";
 // import { submitBlog } from '../../redux/slices/blogSlice'; // Ensure this path is correct
 
 const PreviewBlog = () => {
@@ -9,6 +10,7 @@ const PreviewBlog = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate(); // Use navigate for redirection
 	const location = useLocation();
+	console.log("location ",location);
 	const formData = location.state;
 
 
@@ -26,11 +28,20 @@ const PreviewBlog = () => {
 		Object.keys(values).forEach((key) => {
 			formDataToSend.append(key, values[key]);
 		});
+		console.log(formDataToSend.entries());
 		if (file) {
 			formDataToSend.append("file", file);
 		}
 		try {
 			// await dispatch(submitBlog(formDataToSend)).unwrap();
+			console.log(formDataToSend);
+			// await AXIOS.post("/api/blog",formDataToSend, {
+				const response = await AXIOS.post("/api/blog",values, {
+				// headers:{
+				// 	"Content-Type": "multipart/form-data"
+				// }
+			});
+			console.log(response);
 			navigate("/"); // Redirect to a success page after submission
 		} catch (error) {
 			console.error("Failed to submit blog:", error);

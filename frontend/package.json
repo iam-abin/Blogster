@@ -3,14 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy":{
-    "/auth/*":{
-      "target": "http://localhost:5000"
-    },
-    "/api/*":{
-      "target": "http://localhost:5000"
-    }
-  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -22,7 +14,7 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.18",
     "@mui/material": "^5.15.18",
-    "@reduxjs/toolkit": "^2.2.5",
+    "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.2",
     "formik": "^2.4.6",
     "install": "^0.13.0",

@@ -5,11 +5,11 @@ require('express-async-errors');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const cors = require('cors')
+const logger = require("morgan")
 
 const keys = require('./config/keys');
 const {errorHandler} = require("./middlewares/errorHandler");
 const { connectDB } = require('./config/db/db.connection');
-
 
 // To available content of these file globally
 require('./models/User');
@@ -23,6 +23,7 @@ require('./services/cache');
 
 const app = express();
 
+app.use(logger("dev"))
 // Middlewares
 app.use(cors())
 app.use(express.json())
@@ -58,5 +59,5 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Listening on port`, PORT);
+  console.log(`Listening on port ${PORT}...`);
 });

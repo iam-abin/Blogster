@@ -7,23 +7,22 @@ import CreateBlogForm from "./components/blog/CreateBlogForm";
 import PreviewBlog from "./components/blog/PreviewBlog";
 
 function App() {
-	const [count, setCount] = useState(0);
+    const [count, setCount] = useState(0);
 
-	return (
-		<>
+    return (
+        <>
+            <Header />
+            <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route exact path="/blogs/:_id" element={<ViewBlog />} />
+                <Route path="/blogs/new" element={<CreateBlogForm />} />
+                <Route path="/blogs/preview" element={<PreviewBlog />} />
 
-			<Header />
-			<Routes>
-				<Route path="/" element={<Landing />} />
-				<Route exact path="/blogs/:_id" element={<ViewBlog />} />
-				<Route path="/blogs/new" element={<CreateBlogForm />} />
-				<Route path="/blogs/preview" element={<PreviewBlog />} />
-
-				{/* <Route path="/" element={<ViewBlog />} /> */}
-				{/* <Route path="/blogs" component={Dashboard} /> */}
-			</Routes>
-		</>
-	);
+                {/* <Route path="/" element={<ViewBlog />} /> */}
+                {/* <Route path="/blogs" component={Dashboard} /> */}
+            </Routes>
+        </>
+    );
 }
 
 export default App;
