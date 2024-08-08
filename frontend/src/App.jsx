@@ -1,14 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Landing from "./components/Landing";
 import Header from "./components/Header";
 import ViewBlog from "./components/blog/ViewBlog";
 import CreateBlogForm from "./components/blog/CreateBlogForm";
 import PreviewBlog from "./components/blog/PreviewBlog";
+import { AXIOS } from "./utils/axiosApi";
+import { useDispatch } from "react-redux";
+import { addUser } from "./utils/redux/reducers/user/userSlice";
 
 function App() {
-    const [count, setCount] = useState(0);
+    const dispatch = useDispatch()
+    const getCurrentUser = async()=>{
+        const currentUser = await AXIOS.get("/api/current-user")
+        console.log(currentUser);
+        dispatch(addUser(currentUser.data))
 
+    }
+    useEffect(()=>{
+        getCurrentUser()
+    },[])
     return (
         <>
             <Header />

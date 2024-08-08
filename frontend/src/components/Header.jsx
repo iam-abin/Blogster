@@ -1,8 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Header = () => {
-	let loggedin = false;
+	const user = useSelector((store)=>store.user)
+	console.log(user);
+	
+	useEffect(()=>{
+
+	},[])
+	
+	const handleLoginClick = async() => {
+		window.location.href = 'http://localhost:5000/auth/google';
+	};
+
 	return (
 		<div className="bg-indigo-800 w-3/4 h-20 mx-auto text-white ">
 			<ul className="flex justify-between">
@@ -10,10 +20,9 @@ const Header = () => {
 					<li className="text-2xl font-bold">Blogster</li>
 				</div>
 				<div className="flex w-40 justify-center items-center">
-					{loggedin && <li>My Blogs</li>}
-					{loggedin && <li>Logout</li>}
-                    <Link to={""}>Login With Google</Link>
-					
+					{user && <li>My Blogs</li>}
+					{user && <li>Logout</li>}
+                    <p className="hover:cursor-pointer" onClick={handleLoginClick}>Login With Google</p>
 				</div>
 			</ul>
 		</div>

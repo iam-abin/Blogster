@@ -22,9 +22,10 @@ module.exports = (app) => {
         res.send(blogs);
     });
 
-	app.get("/api/blog/:id", requireLogin, async (req, res) => {
+	// app.get("/api/blog/:id", requireLogin, async (req, res) => {
+		app.get("/api/blog/:id", async (req, res) => {
         const blog = await Blog.findOne({
-            _user: req.user.id,
+            // _user: req.user.id,
             _id: req.params.id,
         });
 

@@ -2,7 +2,7 @@ import React from "react";
 import HomePage from "./HomePage";
 
 const Landing = () => {
-	const loggedin = true;
+	const loggedin = false;
 	return (
 		<>
 			{!loggedin && (

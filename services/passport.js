@@ -5,12 +5,15 @@ const keys = require('../config/keys');
 
 const User = mongoose.model('User');
 
+
 passport.serializeUser((user, done) => {
+  console.log("Serializing user:", user.id); // Debug
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
   User.findById(id).then(user => {
+    console.log("Deserializing user:", user); // Debug
     done(null, user);
   });
 });
@@ -18,21 +21,25 @@ passport.deserializeUser((id, done) => {
 passport.use(
   new GoogleStrategy(
     {
-      callbackURL: '/auth/google/callback',
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
+      callbackURL: 'http://localhost:5000/auth/google/callback',
       proxy: true
     },
     async (accessToken, refreshToken, profile, done) => {
+      console.log("PROFILE ", profile);
       try {
         const existingUser = await User.findOne({ googleId: profile.id });
         if (existingUser) {
           return done(null, existingUser);
         }
-        const user = await new User({
+        const user = new User({
           googleId: profile.id,
-          displayName: profile.displayName
-        }).save();
+          displayName: profile.displayName,
+          profileImage: profile.photos[0].value
+        })
+        await user.save();
+
         done(null, user);
       } catch (err) {
         done(err, null);
