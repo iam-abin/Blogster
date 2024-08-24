@@ -7,13 +7,13 @@ const User = mongoose.model('User');
 
 
 passport.serializeUser((user, done) => {
-  console.log("Serializing user:", user.id); // Debug
+  // console.log("Serializing user:", user.id); // Debug
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
   User.findById(id).then(user => {
-    console.log("Deserializing user:", user); // Debug
+    // console.log("Deserializing user:", user); // Debug
     done(null, user);
   });
 });
@@ -27,7 +27,7 @@ passport.use(
       proxy: true
     },
     async (accessToken, refreshToken, profile, done) => {
-      console.log("PROFILE ", profile);
+      // console.log("PROFILE ", profile);
       try {
         const existingUser = await User.findOne({ googleId: profile.id });
         if (existingUser) {

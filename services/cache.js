@@ -35,10 +35,11 @@ mongoose.Query.prototype.exec = async function () {
 
 	// check if we have value for key in redis
 	const cacheValue = await client.hget(this.hashKey, key);
-
+	console.log("cacheValue ",cacheValue);
+	
 	// if the blogs are cached, then send the cached blogs immediately
 	if (cacheValue) {
-		console.log("SERVING FROM CACHE");
+		console.log("<=============== SERVING FROM CACHE ===============>");
 		const doc = JSON.parse(cacheValue);
 
 		return Array.isArray(doc)
@@ -50,12 +51,13 @@ mongoose.Query.prototype.exec = async function () {
 	const result = await exec.apply(this, arguments);
 	// hset eg_- {user1: {name: "abin", age: 10}} // its like a nested object
 	client.hset(this.hashKey, key, JSON.stringify(result), "EX", 10); // expires after 10 seconds
-	console.log("SERVING FROM MONGO");
+	console.log("<=============== SERVING FROM MONGO ===============>");
 	return result;
 };
 
 module.exports = {
-	clearHash(hashKey) {
+	clearCache(hashKey) {
+		console.log("<=============== CLEARING CACHE ===============>");
 		client.del(JSON.stringify(hashKey));
 	},
 };

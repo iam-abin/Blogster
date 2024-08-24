@@ -1,6 +1,6 @@
 require("dotenv").config();
-const express = require("express");
 require("express-async-errors");
+const express = require("express");
 // const mongoose = require('mongoose');
 const session = require("express-session");
 const passport = require("passport");
@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
     session({
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        secret: [keys.cookieKey],
+        secret: keys.cookieKey,
         resave: false,
         saveUninitialized: true,
         cookie: { secure: false },
@@ -46,8 +46,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-    console.log("Session Cookie:", req.session); // Debug
-    console.log("User:", req.user); // Debug
+    // console.log("Session Cookie:", req.session); // Debug
+    // console.log("User:", req.user); // Debug
     next();
 });
 // connecting to mongodb database

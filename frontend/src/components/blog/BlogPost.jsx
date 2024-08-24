@@ -11,7 +11,7 @@ const BlogPost = ({ blog }) => {
 
             <hr />
             <div className="text-orange-300 ">
-                <Link to={`/blogs/${blog._id}`}>Read</Link>
+                <Link to={`/blog/read/${blog._id}`}>Read</Link>
             </div>
         </div>
     );

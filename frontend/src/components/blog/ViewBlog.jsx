@@ -1,62 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { AXIOS } from "../../utils/axiosApi";
+import { BASE_URL_AWS } from "../../utils/constants";
 
 const ViewBlog = () => {
-    let blog = true;
     const { _id } = useParams();
     const [currentBlog, setCurrentBlog] = useState(null);
-    const blogs = useSelector((store) => store.blog.blogs);
     const navigate = useNavigate();
 
     const getABlogPost = async (id) => {
         try {
-            const response = await AXIOS.get("/api/blog/"+id);
-            console.log(response);
-            setCurrentBlog(response.data)
+            const response = await AXIOS.get("/api/blog/" + id);
+            console.log("response", response);
+            setCurrentBlog(response.data);
         } catch (error) {
             console.error("Failed to get current blog:", error);
             // Handle error case here
         }
     };
+
     useEffect(() => {
-        if (blogs.length) {
-            const selectedBlog = blogs.find((blog) => blog._id === _id);
-            setCurrentBlog(selectedBlog);
-            selectedBlog && setCurrentBlog(selectedBlog);
-        } else {
-			console.log("No blogs in found in store");
-			getABlogPost(_id)
-        }
+        console.log("No blogs found in store");
+        getABlogPost(_id);
     }, []);
 
-    let imageUrl =
-        "6654fdb1175533afcb5e04f8/d98e2b70-1c71-11ef-b1de-bbfb2c16c856.jpeg";
-    if (!blog) return "";
+    if (!currentBlog) return null;
 
-    // blog.imageUrl (it is an id of image from s3)
+    const imageUrl = `${BASE_URL_AWS}/${currentBlog?.imageUrl}`;
 
     return (
-        <div className="bg-red-200 flex flex-col items-center justify-center">
-            <div className="w-3/4 p-6 bg-gray-400">{currentBlog?.title}</div>
-            <div className="w-3/4 p-6 bg-gray-400">{currentBlog?.content}</div>
-            <div className="flex flex-row justify-between w-3/4 ">
-                {_id && imageUrl && (
-                    <img
-                        width="500"
-                        height="500"
-                        src={`https://blog-app-new-bucket.s3.ap-south-1.amazonaws.com/${imageUrl}`}
-                        alt=""
-                    />
-                )}
-                <span
-                    className="hover:cursor-pointer bg-blue-600 px-4 h-6"
-                    onClick={() => navigate(-1)}
-                >
-                    Go Back
-                </span>
+        <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-300 flex flex-col items-center py-8 px-4">
+            <div className="w-full max-w-3xl bg-white shadow-lg rounded-lg overflow-hidden">
+                <div className="p-8">
+                    <h1 className="text-3xl font-bold text-gray-800 mb-4">
+                        {currentBlog?.title}
+                    </h1>
+                    <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                        {currentBlog?.content}
+                    </p>
+                    {imageUrl && (
+                        <div className="flex justify-center mb-6">
+                            <img
+                                className="rounded-lg shadow-md max-w-full h-auto"
+                                src={imageUrl}
+                                alt={currentBlog?.title}
+                            />
+                        </div>
+                    )}
+                    <div className="flex justify-end">
+                        <button
+                            className="bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700 transition-all"
+                            onClick={() => navigate(-1)}
+                        >
+                            Go Back
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );

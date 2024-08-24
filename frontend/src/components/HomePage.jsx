@@ -28,10 +28,10 @@ const HomePage = () => {
     return (
         <>
             <div className="flex flex-col items-center">
-                {blogPosts.map((blog, index) => {
-                    console.log(blog);
+                {blogPosts.length?blogPosts.map((blog, index) => {
                     return <BlogPost key={index} blog={blog} />;
-                })}
+                }):<div className="flex justify-center items-center bg-red-300 h-48 w-full">You dont have nay posts yet</div>}
+                
             </div>
             <div className="flex justify-end mr-32 h-16">
                 <Link className="mr-0 font-bold text-red-400" to={"/blogs/new"}>

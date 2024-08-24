@@ -12,8 +12,10 @@ import { addUser } from "./utils/redux/reducers/user/userSlice";
 function App() {
     const dispatch = useDispatch()
     const getCurrentUser = async()=>{
+        
         const currentUser = await AXIOS.get("/api/current-user")
-        console.log(currentUser);
+        console.log("This is App.js get current user function",currentUser.data);
+        // console.log();
         dispatch(addUser(currentUser.data))
 
     }
@@ -25,7 +27,7 @@ function App() {
             <Header />
             <Routes>
                 <Route path="/" element={<Landing />} />
-                <Route exact path="/blogs/:_id" element={<ViewBlog />} />
+                <Route exact path="/blog/read/:_id" element={<ViewBlog />} />
                 <Route path="/blogs/new" element={<CreateBlogForm />} />
                 <Route path="/blogs/preview" element={<PreviewBlog />} />
 
