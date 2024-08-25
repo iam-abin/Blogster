@@ -1,10 +1,11 @@
-## Readme for server
-=============
+## Blogster
+
+It is a blog application build focused on the redis caching mechanism.
 
 ### prerequsties
--Nodejs
--Mongodb
--Redis (Installation step on bottom area)
+- Nodejs
+- Mongodb 
+- Redis (Installation step on bottom area)
 
 ## Installation
 
@@ -45,6 +46,17 @@ npm install
 ```
  npm run dev
 ```
+# Images
+![Screenshot from 2024-08-25 13-13-44](https://github.com/user-attachments/assets/323499e5-b189-44b1-86ac-e5d1e1e31043)
+
+![Screenshot from 2024-08-25 13-14-04](https://github.com/user-attachments/assets/e8a7544d-7622-41b7-bd99-29a8d03a6c6a)
+
+![Screenshot from 2024-08-25 13-20-48](https://github.com/user-attachments/assets/d809a9ee-fd82-4114-8b4d-269b623ce2db)
+
+![Screenshot from 2024-08-25 13-19-38](https://github.com/user-attachments/assets/cec07238-7b22-46ea-b339-7a1cce6c9491)
+
+![Screenshot from 2024-08-25 13-23-04](https://github.com/user-attachments/assets/6fdfea7c-c17c-49df-9cce-1cc95f45dbda)
+
 
 ## redis
 
