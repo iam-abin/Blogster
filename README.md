@@ -1,6 +1,10 @@
-readme server
+## Readme for server
 =============
 
+### prerequsties
+-Nodejs
+-Mongodb
+-Redis (Installation step on bottom area)
 
 ### Setup
 
