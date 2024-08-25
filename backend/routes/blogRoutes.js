@@ -1,16 +1,17 @@
 const mongoose = require("mongoose");
-const requireLogin = require("../middlewares/requireLogin");
+// const {checkUser} = require("../middlewares/checkUser");
+const {checkUser} = require("../middlewares/requireLogin")
 const cleanHash = require("../middlewares/cleanCache");
 
 const Blog = mongoose.model("Blog");
 
 module.exports = (app) => {
-    app.get("/api/blogs", requireLogin, async (req, res) => {
+    app.get("/api/blogs", checkUser, async (req, res) => {
         const blogs = await Blog.find();
         res.send(blogs);
     });
 
-    app.get("/api/blog/:id", requireLogin, async (req, res) => {
+    app.get("/api/blog/:id", checkUser, async (req, res) => {
         const blog = await Blog.findOne({
             _id: req.params.id,
         }).cache({
@@ -20,7 +21,7 @@ module.exports = (app) => {
         res.send(blog);
     });
 
-    app.post("/api/blog", requireLogin, cleanHash, async (req, res) => {
+    app.post("/api/blog", checkUser, cleanHash, async (req, res) => {
         const { title, content, imageUrl } = req.body;
         console.log("req.body ===>",req.body);
         

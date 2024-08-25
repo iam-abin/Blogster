@@ -1,7 +1,6 @@
 require("dotenv").config();
 require("express-async-errors");
 const express = require("express");
-// const mongoose = require('mongoose');
 const session = require("express-session");
 const passport = require("passport");
 const cors = require("cors");
@@ -10,6 +9,7 @@ const logger = require("morgan");
 const keys = require("./config/keys");
 const { errorHandler } = require("./middlewares/errorHandler");
 const { connectDB } = require("./config/db/db.connection");
+const { FRONTEND_URL } = require("./utils/constants");
 
 // To available content of these file globally
 require("./models/User");
@@ -17,16 +17,13 @@ require("./models/Blog");
 require("./services/passport");
 require("./services/cache");
 
-// mongoose.Promise = global.Promise;
-// mongoose.connect(keys.mongoURI);
-
 const app = express();
 
 app.use(logger("dev"));
 // Middlewares
 app.use(
     cors({
-        origin: "http://localhost:4000", // Your frontend URL
+        origin: FRONTEND_URL,
         credentials: true,
     })
 );
@@ -45,16 +42,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use((req, res, next) => {
-    // console.log("Session Cookie:", req.session); // Debug
-    // console.log("User:", req.user); // Debug
-    next();
-});
 // connecting to mongodb database
 connectDB();
 
 require("./routes/authRoutes")(app);
-require("./routes/blogRoutes")(app);
+require("./routes/blogRoutes")(app)
 require("./routes/uploadRoutes")(app);
 
 if (process.env.NODE_ENV === "production") {

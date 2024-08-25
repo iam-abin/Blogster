@@ -1,4 +1,5 @@
 const passport = require("passport");
+const { FRONTEND_URL } = require("../utils/constants");
 
 module.exports = (app) => {
     app.get(
@@ -13,7 +14,7 @@ module.exports = (app) => {
         passport.authenticate("google"),
         (req, res) => {
             console.log("User after callback:", req.user); // Debug
-            res.redirect("http://localhost:4000");
+            res.redirect(FRONTEND_URL);
         }
     );
 
