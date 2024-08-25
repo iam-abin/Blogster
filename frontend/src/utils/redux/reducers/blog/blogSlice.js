@@ -1,11 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { submitBlog } from "./blogThunks";
 
 const initialState = {
     blogs: [],
     blog: null,
     // status: "idle",
-    // error: null,
+    isMyBlogs: false
 };
 const blogSlice = createSlice({
     name: "blogs",
@@ -18,22 +17,19 @@ const blogSlice = createSlice({
         addBlogs: (state, action) => {
             state.blogs = action.payload;
         },
+        setMyBlogs: (state, action) => { // To show all the blogs of current loggined user
+            console.log("=====================",action.payload);
+            
+            if(typeof action.payload === 'boolean'){
+                state.isMyBlogs = action.payload;
+            }else{
+                state.isMyBlogs = !state.isMyBlogs;
+            }
+                
+
+        },
     },
-    // extraReducers: (builder) => {
-    //     // builder
-    //     // 	.addCase(submitBlog.pending, (state) => {
-    //     // 		state.status = "loading";
-    //     // 	})
-    //     // 	.addCase(submitBlog.fulfilled, (state, action) => {
-    //     // 		state.status = "succeeded";
-    //     // 		state.blogs.push(action.payload);
-    //     // 	})
-    //     // 	.addCase(submitBlog.rejected, (state, action) => {
-    //     // 		state.status = "failed";
-    //     // 		state.error = action.payload;
-    //     // 	})
-    // },
 });
 
-export const { addABlog, addBlogs } = blogSlice.actions;
+export const { addABlog, addBlogs, setMyBlogs } = blogSlice.actions;
 export default blogSlice.reducer;

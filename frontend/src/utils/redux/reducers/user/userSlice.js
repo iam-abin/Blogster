@@ -7,7 +7,7 @@ const initialState = {
     // error: null,
 }
 const userSlice = createSlice({
-	name: "blogs",
+	name: "user",
 	initialState,
 	reducers: {
 		// Add your non-async reducers here if needed
@@ -18,20 +18,6 @@ const userSlice = createSlice({
 			state.user = null
 		},
 	},
-	// extraReducers: (builder) => {
-	// 	builder
-	// 		.addCase(submitBlog.pending, (state) => {
-	// 			state.status = "loading";
-	// 		})
-	// 		.addCase(submitBlog.fulfilled, (state, action) => {
-	// 			state.status = "succeeded";
-	// 			state.blogs.push(action.payload);
-	// 		})
-	// 		.addCase(submitBlog.rejected, (state, action) => {
-	// 			state.status = "failed";
-	// 			state.error = action.payload;
-	// 		});
-	// },
 });
 
 export const { addUser, logoutUser } = userSlice.actions;

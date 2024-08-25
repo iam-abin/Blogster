@@ -9,7 +9,7 @@ const exec = mongoose.Query.prototype.exec; // it stores reference to the origin
 
 // Creating a function for caching. Caching will perform only if 'useCache' variable is true
 mongoose.Query.prototype.cache = function (options = {}) { // example req.user.id is key in find().cache({key: req.user.id}); 
-	this.useCache = true; // 'useCache' is a variable that we are creating now, its not built-in
+	this.useCache = true; // Flag to enable caching // 'useCache' is a variable that we are creating now, its not built-in
 	this.hashKey = JSON.stringify(options.cacheValuekey || ""); // key passing in options is the top-level key, ie, hashkey ie, userId
 
 	return this; // It will help for chaining in the query, eg:- .limit(10).cache().skip(2).sort()
@@ -44,9 +44,10 @@ mongoose.Query.prototype.exec = async function () {
 		console.log("=====> From cache key:", key);
 		const doc = JSON.parse(cacheValue);
 
-		return Array.isArray(doc)
-			? doc.map((d) => new this.model(d))
-			: new this.model(doc);
+		const m = Array.isArray(doc)
+		? doc.map((d) => new this.model(d))
+		: new this.model(doc);
+		return doc
 	}
 
 	// Otherwise, issue the query and store the result in redis

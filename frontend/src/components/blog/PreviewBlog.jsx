@@ -1,161 +1,131 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Formik, Form } from "formik";
-import { AXIOS } from "../../utils/axiosApi";
 import axios from "axios";
-// import { submitBlog } from '../../redux/slices/blogSlice'; // Ensure this path is correct
+import { AXIOS } from "../../utils/axiosApi";
 
 const PreviewBlog = () => {
     const [file, setFile] = useState(null);
-    const dispatch = useDispatch();
-    const navigate = useNavigate(); // Use navigate for redirection
+    const navigate = useNavigate();
     const location = useLocation();
-    console.log("location ", location);
     const formData = location.state;
 
     const handleFileChange = (event) => {
-        console.log("file is ", event.target.files[0]);
-
         setFile(event.target.files[0]);
     };
 
-    const onCancel = () =>
+    const onCancel = () => {
         navigate(-1, {
             state: {
                 title: formData.title,
                 content: formData.content,
             },
         });
+    };
 
-		const handleSubmit = async (values) => {
-			const formDataToSend = new FormData();
-			
-			// Append form values
-			Object.keys(values).forEach((key) => {
-				formDataToSend.append(key, values[key]);
-			});
-		
-			try {
-				// Get upload URL from your backend
-				const uploadConfig = await AXIOS.get('/api/upload');
-				
-				if (file) {
-					// Upload the file to the URL received from the backend
-					await axios.put(uploadConfig.data.url, file, {
-						headers: {
-							'Content-Type': file.type
-						}
-					});
-		
-					// Append the image URL key to the formData
-					values["imageUrl"] = uploadConfig.data.key;
-				}
-		
-				// Log the FormData entries for debugging
-				formDataToSend.forEach((value, key) => {
-					console.log(key, value);
-				});
-		
-				// Send the formData to the backend
-				const response = await AXIOS.post("/api/blog", values);
-				console.log(response ,"before navigate");
-				
-				
-				navigate("/"); // Redirect after successful submission
-			} catch (error) {
-				console.error("Failed to submit blog:", error);
-				// Handle the error appropriately
-			}
-		};
-		
+    const handleSubmit = async (values, { setSubmitting }) => {
+        setSubmitting(true);
+
+        const formDataToSend = new FormData();
+
+        // Append form values
+        Object.keys(values).forEach((key) => {
+            formDataToSend.append(key, values[key]);
+        });
+
+        try {
+            // Get upload URL from your backend
+            const uploadConfig = await AXIOS.get('/api/upload');
+
+            if (file) {
+                // Upload the file to the URL received from the backend
+                await axios.put(uploadConfig.data.url, file, {
+                    headers: {
+                        'Content-Type': file.type
+                    }
+                });
+
+                // Append the image URL key to the formData
+                values["imageUrl"] = uploadConfig.data.key;
+            }
+
+            // Send the formData to the backend
+            await AXIOS.post("/api/blog", values);
+
+            navigate("/"); // Redirect after successful submission
+        } catch (error) {
+            console.error("Failed to submit blog:", error);
+            // Handle the error appropriately
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
-        <div className=" w-3/4 mx-auto">
-            <h1 className="mb-4">Please confirm your entries</h1>
+        <div className="container mx-auto p-6 flex flex-col items-center">
+            <div className="w-full max-w-6xl p-6 bg-white shadow-md rounded-lg">
+                <h1 className="text-2xl font-bold mb-4 text-center">Please Confirm Your Entries</h1>
 
-            <span className="font-light text-sm">Blog Title</span>
-            <p className="mb-3">{formData.title}</p>
+                <div className="mb-6">
+                    <h2 className="text-lg font-semibold">Blog Title</h2>
+                    <p className="text-gray-700">{formData.title}</p>
+                </div>
 
-            <span className="font-light text-sm">Content</span>
-            <p className="mb-4">{formData.content}</p>
-            <Formik
-                initialValues={{
-                    title: formData.title,
-                    content: formData.content,
-                }}
-                validate={(values) => {
-                    const errors = {};
-                    if (!values.title) {
-                        errors.title = "Title is required";
-                    }
-                    if (!values.content) {
-                        errors.content = "Content is required";
-                    }
-                    return errors;
-                }}
-                onSubmit={handleSubmit}
-            >
-                {({
-                    values,
-                    errors,
-                    touched,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit: formikSubmit,
-                    isSubmitting,
-                }) => (
-                    <Form
-                        onSubmit={formikSubmit}
-                        className="flex flex-col  mx-auto"
-                    >
-                        {/* <input
-						type="text"
-						name="title"
-						className="border-black mb-5"
-						onChange={handleChange}
-						onBlur={handleBlur}
-						value={values.title}
-					/>
-					{errors.title && touched.title && <div>{errors.title}</div>}
-					<textarea
-						name="content"
-						className="border-black mb-5"
-						onChange={handleChange}
-						onBlur={handleBlur}
-						value={values.content}
-					/>
-					{errors.content && touched.content && (
-						<div>{errors.content}</div>
-					)} */}
-                        <h1 className="text-2xl">Add an image</h1>
-                        <div className="flex flex-row justify-between mt-5">
-                            <input
-                                className="text-sm"
-                                type="file"
-                                accept="image/*"
-                                onChange={handleFileChange}
-                            />
-                            <button
-                                type="submit"
-                                className="bg-green-600 w-28 h-10"
-                                disabled={isSubmitting}
-                            >
-                                Save Blog
-                            </button>
-                        </div>
-                        <div className="flex justify-start mt-5">
-                            <button
-                                className="bg-yellow-500 w-28 h-10"
-                                type="button"
-                                onClick={onCancel}
-                            >
-                                Back
-                            </button>
-                        </div>
-                    </Form>
-                )}
-            </Formik>
+                <div className="mb-6">
+                    <h2 className="text-lg font-semibold">Content</h2>
+                    <p className="text-gray-700">{formData.content}</p>
+                </div>
+
+                <Formik
+                    initialValues={{
+                        title: formData.title,
+                        content: formData.content,
+                    }}
+                    validate={(values) => {
+                        const errors = {};
+                        if (!values.title) {
+                            errors.title = "Title is required";
+                        }
+                        if (!values.content) {
+                            errors.content = "Content is required";
+                        }
+                        return errors;
+                    }}
+                    onSubmit={handleSubmit}
+                >
+                    {({ isSubmitting }) => (
+                        <Form className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium mb-2">Add an image</label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    className="block w-full text-sm border border-gray-300 rounded-md p-2"
+                                />
+                            </div>
+
+                            <div className="flex justify-between">
+
+                                <button
+                                    type="button"
+                                    className="bg-yellow-500 text-white py-2 px-4 rounded-md"
+                                    onClick={onCancel}
+                                >
+                                    Back
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="bg-green-600 text-white py-2 px-4 rounded-md"
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? "Saving..." : "Save Blog"}
+                                </button>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            </div>
         </div>
     );
 };

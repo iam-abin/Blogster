@@ -4,6 +4,7 @@ import Landing from "./components/Landing";
 import Header from "./components/Header";
 import ViewBlog from "./components/blog/ViewBlog";
 import CreateBlogForm from "./components/blog/CreateBlogForm";
+import EditBlog from "./components/blog/EditBlog";
 import PreviewBlog from "./components/blog/PreviewBlog";
 import { AXIOS } from "./utils/axiosApi";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,6 +43,12 @@ function App() {
                     path="/blogs/preview"
                     element={user ? <PreviewBlog /> : <Navigate to={"/"} />}
                 />
+
+                <Route
+                    path="/edit-blog/:_id"
+                    element={user ? <EditBlog /> : <Navigate to={"/"} />}
+                />
+                <Route path="*" element={<Navigate to={"/"} />} />
             </Routes>
         </>
     );
