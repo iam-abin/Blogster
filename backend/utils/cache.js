@@ -10,7 +10,7 @@ const exec = mongoose.Query.prototype.exec; // it stores reference to the origin
 // Creating a function for caching. Caching will perform only if 'useCache' variable is true
 mongoose.Query.prototype.cache = function (options = {}) { // example req.user.id is key in find().cache({key: req.user.id}); 
 	this.useCache = true; // 'useCache' is a variable that we are creating now, its not built-in
-	this.hashKey = JSON.stringify(options.key || ""); // key passing in options is the top-level key, ie, hashkey ie, userId
+	this.hashKey = JSON.stringify(options.cacheValuekey || ""); // key passing in options is the top-level key, ie, hashkey ie, userId
 
 	return this; // It will help for chaining in the query, eg:- .limit(10).cache().skip(2).sort()
 };
@@ -35,11 +35,13 @@ mongoose.Query.prototype.exec = async function () {
 
 	// check if we have value for key in redis
 	const cacheValue = await client.hget(this.hashKey, key);
-	console.log("cacheValue ",cacheValue);
+	// console.log("cacheValue ",cacheValue);
 	
 	// if the blogs are cached, then send the cached blogs immediately
 	if (cacheValue) {
 		console.log("<=============== SERVING FROM CACHE ===============>");
+		console.log("=====> From cache hashKey:", this.hashKey);
+		console.log("=====> From cache key:", key);
 		const doc = JSON.parse(cacheValue);
 
 		return Array.isArray(doc)
@@ -50,14 +52,32 @@ mongoose.Query.prototype.exec = async function () {
 	// Otherwise, issue the query and store the result in redis
 	const result = await exec.apply(this, arguments);
 	// hset eg_- {user1: {name: "abin", age: 10}} // its like a nested object
-	client.hset(this.hashKey, key, JSON.stringify(result), "EX", 10); // expires after 10 seconds
+	
+	await client.hset(this.hashKey, key, JSON.stringify(result));
+	client.expire(this.hashKey, 10); // Expire the entire hash after 10 seconds
+	
+	console.log("Creating cache for hashKey:", this.hashKey);
+	console.log("Creating cache for key:", key);
 	console.log("<=============== SERVING FROM MONGO ===============>");
 	return result;
 };
 
 module.exports = {
-	clearCache(hashKey) {
-		console.log("<=============== CLEARING CACHE ===============>");
-		client.del(JSON.stringify(hashKey));
+	async clearCache(hashKey) {
+		const key = JSON.stringify(hashKey);
+		console.log("Clearing cache for hashKey:", key);
+		await client.del(key, (err, response) => {
+			if (err) {
+				console.error("Failed to clear cache:", err);
+			} else {
+				console.log("<=============== CLEARING CACHE ===============>");
+				console.log("Cache cleared successfully:", response);
+			}
+		});
 	},
 };
+// module.exports = {
+// 	clearCache(hashKey) {
+// 		client.del(JSON.stringify(hashKey));
+// 	},
+// };

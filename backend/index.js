@@ -14,8 +14,8 @@ const { FRONTEND_URL } = require("./utils/constants");
 // To available content of these file globally
 require("./models/User");
 require("./models/Blog");
-require("./services/passport");
-require("./services/cache");
+require("./utils/passport");
+require("./utils/cache");
 
 const app = express();
 
@@ -49,15 +49,15 @@ require("./routes/authRoutes")(app);
 require("./routes/blogRoutes")(app)
 require("./routes/uploadRoutes")(app);
 
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static("client/build"));
+// if (process.env.NODE_ENV === "production") {
+//     app.use(express.static("frontend/build"));
 
-    const path = require("path");
+//     const path = require("path");
 
-    app.get("*", (req, res) => {
-        res.sendFile(path.resolve("client", "build", "index.html"));
-    });
-}
+//     app.get("*", (req, res) => {
+//         res.sendFile(path.resolve("frontend", "build", "index.html"));
+//     });
+// }
 
 app.use(errorHandler);
 

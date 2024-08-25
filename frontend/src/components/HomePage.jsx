@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import BlogPost from "./blog/BlogPost";
-import { blogsData } from "../data/dummy"
 import { useDispatch } from 'react-redux'
 import { Link } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import Button from "@mui/material/Button";
 import { AXIOS } from "../utils/axiosApi";
 import { addBlogs } from "../utils/redux/reducers/blog/blogSlice";
 
