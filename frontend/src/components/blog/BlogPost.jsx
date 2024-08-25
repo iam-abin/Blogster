@@ -9,15 +9,17 @@ const BlogPost = ({ blog }) => {
     
 
     return (
-        <div className="w-3/4 bg-white my-2 p-4 shadow-md shadow-slate-300 rounded-md">
+        <div className="w-3/5 bg-white my-2 p-4 shadow-md shadow-slate-300 rounded-md">
+            <div className="flex justify-between">
             <h1 className="text-2xl mb-2">{title}</h1>
-            <div className="flex items-center mb-4">
+            <div className="flex gap-2 items-center mb-4">
+                <span className="font-semibold text-gray-500">{displayName}</span>
                 <img
                     src={profileImage}
                     alt={displayName}
-                    className="w-10 h-10 rounded-full mr-3"
+                    className="w-9 h-9 rounded-full mr-3"
                 />
-                <span className="font-semibold">{displayName}</span>
+            </div>
             </div>
             <p>{content}</p>
             <hr />
