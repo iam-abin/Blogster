@@ -10,7 +10,7 @@ const Header = () => {
     const navigate = useNavigate();
     const { user } = useSelector((store) => store.user);
     const { isMyBlogs } = useSelector((store) => store.blog);
-    
+
     const handleLoginClick = async () => {
         window.location.href = "http://localhost:5000/auth/google";
     };
@@ -18,17 +18,22 @@ const Header = () => {
     const handleLogoutClick = async () => {
         await AXIOS.get("/auth/logout");
         dispatch(logoutUser());
-        navigate('/');
+        navigate("/");
     };
 
     return (
         <div className="bg-indigo-800 h-20 text-white flex items-center px-4">
             {/* Logo and Navigation */}
             <div className="flex-grow">
-                <li className="text-2xl font-bold cursor-pointer list-none" onClick={() =>{
-                    dispatch(setMyBlogs(false));
-                    navigate('/')
-                } }>Blogster</li>
+                <li
+                    className="text-2xl font-bold cursor-pointer list-none"
+                    onClick={() => {
+                        dispatch(setMyBlogs(false));
+                        navigate("/");
+                    }}
+                >
+                    Blogster
+                </li>
             </div>
 
             {/* User Profile and Actions */}
@@ -44,19 +49,35 @@ const Header = () => {
                                 />
                             )}
                             {user.displayName && (
-                                <span className="font-semibold">{user.displayName}</span>
+                                <span className="font-semibold">
+                                    {user.displayName}
+                                </span>
                             )}
                         </div>
                         <div className="flex gap-5">
-                            <li className={`cursor-pointer list-none p-2 rounded-lg ${isMyBlogs? "bg-blue-400":"bg-blue-500"}`} onClick={() => {
-                                navigate("/")
-                                dispatch(setMyBlogs())
-                            }}>My Blogs</li>
-                            <li className="cursor-pointer list-none" onClick={handleLogoutClick}>Logout</li>
+                            <li
+                                className={`cursor-pointer list-none p-2 rounded-lg ${
+                                    isMyBlogs ? "bg-blue-400" : "bg-blue-500"
+                                }`}
+                                onClick={() => {
+                                    navigate("/");
+                                    dispatch(setMyBlogs());
+                                }}
+                            >
+                                My Blogs
+                            </li>
+                            <li
+                                className="cursor-pointer list-none"
+                                onClick={handleLogoutClick}
+                            >
+                                Logout
+                            </li>
                         </div>
                     </>
                 ) : (
-                    <p className="cursor-pointer" onClick={handleLoginClick}>Login With Google</p>
+                    <p className="cursor-pointer" onClick={handleLoginClick}>
+                        Login With Google
+                    </p>
                 )}
             </div>
         </div>

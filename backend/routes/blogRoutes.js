@@ -8,10 +8,7 @@ const Blog = mongoose.model("Blog");
 module.exports = (app) => {
     // To get all the posts
     app.get("/api/blogs", checkUser, async (req, res) => {
-        // const blogs = await Blog.find().populate('userId').cache({
-        //     cacheValuekey: req.user._id,
-        // });
-        const blogs = await Blog.find().populate("userId").cache({
+        const blogs = await Blog.find().sort({updatedAt: -1}).populate("userId").cache({
             cacheValuekey: req.user._id,
         });
         res.send(blogs);
