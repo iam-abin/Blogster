@@ -46,6 +46,13 @@ npm install
 ```
  npm run dev
 ```
+
+5. Access the application from browser using:
+
+```
+http://localhost:4000
+```
+
 # Images
 ![Screenshot from 2024-08-25 13-13-44](https://github.com/user-attachments/assets/323499e5-b189-44b1-86ac-e5d1e1e31043)
 
