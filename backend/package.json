@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "author": "",
+  "author": "abin",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.188.0",

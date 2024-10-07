@@ -22,6 +22,12 @@ mongoose.Query.prototype.exec = async function () {
 	}
 
 	// FOLLOWING ARE THE CODE RELATED TO CACHING IF 'this.useCache' IS TRUE
+	
+	// Extract the skip and limit options
+	const options = this.getOptions ? this.getOptions() : this.options;
+	const skip = options.skip || 0;  // Default to 0 if not set
+	const limit = options.limit || 0;  // Default to 0 if not set
+	
 	// We need to store js objects as string in reids
 	const key = JSON.stringify(
 		// 'this' represents 'mongoose.Query'
@@ -30,6 +36,8 @@ mongoose.Query.prototype.exec = async function () {
 		// this.mongooseCollection.name
 		Object.assign({}, this.getQuery(), {
 			collection: this.mongooseCollection.name,
+			skip,
+            limit,
 		})
 	);
 
@@ -77,8 +85,3 @@ module.exports = {
 		});
 	},
 };
-// module.exports = {
-// 	clearCache(hashKey) {
-// 		client.del(JSON.stringify(hashKey));
-// 	},
-// };

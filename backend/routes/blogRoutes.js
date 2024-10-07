@@ -1,26 +1,48 @@
 const mongoose = require("mongoose");
-// const {checkUser} = require("../middlewares/checkUser");
 const { checkUser } = require("../middlewares/requireLogin");
 const cleanCache = require("../middlewares/cleanCache");
 
 const Blog = mongoose.model("Blog");
 
 module.exports = (app) => {
-    // To get all the posts
-    app.get("/api/blogs", checkUser, async (req, res) => {
-        const blogs = await Blog.find().sort({updatedAt: -1}).populate("userId").cache({
-            cacheValuekey: req.user._id,
-        });
-        res.send(blogs);
+    // To get all the posts based on page number
+    app.get("/api/blogs/:page", checkUser, async (req, res) => {
+        const { page } = req.params;
+        const limit = 3;
+        const skip = (page - 1) * limit;
+
+        const blogs = await Blog.find()
+            .sort({ updatedAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate("userId")
+            .cache({
+                cacheValuekey: req.user._id,
+            });
+
+        const totalBlogs = await Blog.countDocuments();
+        const totalPages = Math.ceil(totalBlogs / limit);
+        res.send({ blogs, totalPages });
     });
 
-     // To get all the posts of a user
-     app.get("/api/my-blogs", checkUser, async (req, res) => {
-        const userId = req.user._id
-        const blogs = await Blog.find({userId }).populate("userId").cache({
-            cacheValuekey: userId,
-        });
-        res.send(blogs);
+    // To get all the posts of a user
+    app.get("/api/my-blogs/:page", checkUser, async (req, res) => {
+        const userId = req.user._id;
+        const { page } = req.params;
+        const limit = 3;
+        const skip = (page - 1) * limit;
+        const blogs = await Blog.find({ userId })
+            .skip(skip)
+            .limit(limit)
+            .populate("userId")
+            .cache({
+                cacheValuekey: userId,
+            });
+
+        const totalBlogs = await Blog.countDocuments({ userId });
+        const totalPages = Math.ceil(totalBlogs / limit);
+
+        res.send({ blogs, totalPages });
     });
 
     // To get a post using post id
